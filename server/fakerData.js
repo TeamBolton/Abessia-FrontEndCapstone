@@ -1,13 +1,12 @@
 const faker = require('faker');
 
+//newProduct creates an appropriately formated object for storage in the Products SQL table
 const newProduct = () => {
   var productObj = {};
   productObj.name = faker.commerce.productName();
   productObj.company = faker.company.companyName();
   productObj.colors = selectColors();
   productObj.price = faker.commerce.price();
-
-  console.log(productObj);
   return productObj;
 }
 
@@ -33,22 +32,33 @@ const newPicArray = () => {
   for (let j = 0; j < numPics; j++) {
     picArray.push(newPicture());
   }
-  console.log(picArray);
   return picArray;
 }
 
 const newPicture = () => {
   var picObj = {};
 
-  picObj.image = faker.image.fashion();
+  //generate a number from 1 to 30
+  var picIndex = Math.floor((Math.random() * 29) +1);
+
+  picObj.image = S3PicURLs[picIndex];
   picObj.description = faker.lorem.sentence();
 
   return picObj;
 }
+
+function generatePicData () {
+  var picArray = [];
+  for (let i = 1; i < 31; i++) {
+    picArray.push(`https://rewhypictures.s3.us-east-2.amazonaws.com/images/boots${i}.jpeg`)
+  }
+  return picArray;
+}
+
+const S3PicURLs = generatePicData();
 
 module.exports = {
   newProduct,
   newPicture,
   newPicArray
 };
-
