@@ -9,10 +9,10 @@
   "scripts": {
     "build:dev": "webpack -d --watch",
     "start": "node server/index.js",
-    "start:dev": "nodemon server/index.js -w server -w database-mysql",
+    "start:dev": "nodemon server/index.js -w server",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
-    "seed": "node server/database.js"
+    "seed": "node seeding/seeding.js"
   },
   "dependencies": {
     "@babel/core": "^7.12.3",

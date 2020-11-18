@@ -1,8 +1,10 @@
 const Seed = require('./seedDB.js');
+const Config = require('./config.js');
+
+const Connection = Seed.makeConnection('rewhy');
 
 const CreateMainDatabase = function (database, callback) {
   const Data = Seed.generateProductsTable(100);
-  const Connection = Seed.makeConnection(database);
   Connection.connect((error) => {
     if (error) {
       callback(error);
@@ -18,10 +20,18 @@ const CreateMainDatabase = function (database, callback) {
   })
 }
 
-CreateMainDatabase('rewhy', (err) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log('Database Seeded');
-  }
-});
+const RetrieveData = function (callback) {
+  Connection.query('SELECT * FROM products;', (err, res, fields) => {
+    if(err) {
+      console.error('DB Error: RetrieveData Failed');
+      callback(err);
+    } else {
+      callback(null, res);
+    }
+  });
+};
+
+module.exports = {
+  CreateMainDatabase,
+  RetrieveData
+};
