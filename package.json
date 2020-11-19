@@ -31,12 +31,15 @@
     "nodemon": "^2.0.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "styled-components": "^5.2.1",
     "underscore": "^1.11.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^4.2.0"
   },
   "devDependencies": {
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git"
+    "babel-plugin-styled-components": "^1.11.1",
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git",
+    "jest-styled-components": "^7.0.3"
   },
   "jest": {
     "collectCoverage": true,
