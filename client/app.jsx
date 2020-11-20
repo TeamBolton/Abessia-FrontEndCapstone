@@ -1,67 +1,64 @@
+//dependencies
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Axios from 'axios';
 import styled from 'styled-components';
 
+//components
+import Main from './components/mainImage.jsx';
+import Info from './components/informationBar.jsx';
+import Left from './components/leftButton.jsx';
+import Right from './components/rightButton.jsx';
+import Previews from './components/previewImages.jsx';
+//import Zoom from './components/zoomBox.jsx';
+
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto;
-  gird-template-rows: auto auto auto auto auto auto auto auto auto;
+  grid-template-columns: 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px;
+  grid-template-rows: 85px 85px 85px 85px 85px 85px 85px 85px;
   grid-gap: 2px;
-  background: cornflowerblue;
 `;
 
 const Item = styled.div`
   font-size: 18px;
   text-align: center;
-  border: 1px solid;
 `;
 
 const MainImage = styled(Item)`
   grid-area: main-image;
   grid-column: 1 / 8;
   grid-row: 1 / 8;
-  background: white;
 `;
 
 const LeftButton = styled(Item)`
   grid-area: left-button;
   grid-column: 1;
   grid-row: 8;
-  background: white;
 `;
 
 const RightButton = styled(Item)`
   grid-area: right-button;
   grid-column: 7;
   grid-row: 8;
-  background: white;
 `;
 
 const PreviewImageBar = styled(Item)`
-  grid-area: preview-image-bar
-  grid-column: 2 / 6;
+  grid-area: preview-image-bar;
+  grid-column: 2 / 7;
   grid-row: 8;
-`;
-
-const InfoBar = styled(Item)`
-  grid-area: info-bar;
-  grid-column: 1 / 5;
-  grid-row: 9;
 `;
 
 const Blank = styled(Item)`
   grid-area: blank;
   grid-column: 8 / 13;
-  grid-row: 8 / 10;
-  border: 0px;
+  grid-row: 8 / 9;
 `;
 
 const ZoomImage = styled(Item)`
   grid-area: zoom-image;
   grid-column: 8 / 13;
-  grid-row: 1 / 7;
+  grid-row: 1 / 8;
 `;
 
 class App extends React.Component {
@@ -69,7 +66,12 @@ class App extends React.Component {
     super(props);
     this.retrieveData = this.retrieveData.bind(this);
     this.parseData = this.parseData.bind(this);
-    this.state = {data: null};
+    this.state = {
+      data: null,
+      currentID: 1,  //default to 1 for dummy data
+      currentColor: 0, //default to 0 for dummy data
+      currentProduct: null,
+    };
   }
 
   componentDidMount() {
@@ -109,25 +111,72 @@ class App extends React.Component {
       }
       parsedData.push(newObj);
     }
+
+    var index = this.state.currentID - 1;
     console.log(parsedData);
-    this.setState({data: parsedData});
+    console.log(parsedData[index]);
+
+    this.setState({
+      data: parsedData,
+      currentProduct: parsedData[index],
+    });
+
+    /*if (this.state.currentID !== undefined){
+      this.setState(
+        {currentProduct: parsedData[this.state.currentID - 1]}
+      );
+    }*/
   }
 
   render() {
-    return (
-      <div>
-        <h1>Hello World!</h1>
-        <Grid class="grid-container">
-          <MainImage class="grid-item">Main Image</MainImage>
-          <ZoomImage class="grid-item">Zoom Image</ZoomImage>
-          <LeftButton class="grid-item">Left</LeftButton>
-          <PreviewImageBar class="grid-item">Preview Images</PreviewImageBar>
-          <RightButton class="grid-item">Right</RightButton>
-          <Blank class="grid-item"></Blank>
-          <InfoBar class="grid-item">Information</InfoBar>
-        </Grid>
-      </div>
-    );
+    if (this.state.currentProduct !== null) {
+      console.log('Current Product and Color Array:');
+      console.log(this.state.currentProduct);
+      console.log(this.state.currentProduct.colors[this.state.currentColor]);
+    }
+
+    if (this.state.currentProduct === null) {
+      return (
+        <div>
+          <Grid className="grid-container">
+            <MainImage className="grid-item">
+            </MainImage>
+            <ZoomImage className="grid-item">
+            </ZoomImage>
+            <LeftButton className="grid-item">
+            </LeftButton>
+            <PreviewImageBar className="grid-item">
+            </PreviewImageBar>
+            <RightButton className="grid-item">
+            </RightButton>
+            <Blank className="grid-item"></Blank>
+          </Grid>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Grid className="grid-container">
+            <MainImage className="grid-item">
+              <Main product={this.state.currentProduct}/>
+            </MainImage>
+            <ZoomImage className="grid-item">
+            </ZoomImage>
+            <LeftButton className="grid-item">
+              <Left/>
+            </LeftButton>
+            <PreviewImageBar className="grid-item">
+              <Previews images={this.state.currentProduct.colors[0].pictures}/>
+            </PreviewImageBar>
+            <RightButton className="grid-item">
+              <Right/>
+            </RightButton>
+            <Blank className="grid-item"></Blank>
+          </Grid>
+          <Info product={this.state.currentProduct}/>
+        </div>
+      );
+    }
   }
 }
 

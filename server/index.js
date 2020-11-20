@@ -15,8 +15,13 @@ app.get('/api/products/photos', (req, res) => {
     console.error('Error on basic GET request');
   } else {
     database.RetrieveData((error, response) => {
-      res.send(response);
-      res.end();
+      if (error) {
+        console.error(error);
+        res.end();
+      } else {
+        res.send(response);
+        res.end();
+      }
     })
   }
 });
