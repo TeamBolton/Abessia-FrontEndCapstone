@@ -12,25 +12,24 @@ class Main extends React.Component {
     super(props)
 
     this.state = {
-      currentImage: "",
-      currentDescr: "Description Here",
-      currentColor: "Color Here",
+      currentImage: 'Image',
+      currentDescr: 'Description',
       isZoom: false
     };
   }
 
   componentDidMount() {
-    console.log(this.props.product);
     this.setState({
-      currentImage: this.props.product.colors[0].pictures[0].image,
-      currentDescr: this.props.product.colors[0].pictures[0].description,
-      currentColor: this.props.product.colors[0],
+      currentImage: this.props.picture,
+      currentDescr: this.props.description,
     });
   }
 
+
+
   render () {
     return (
-      <Image src={this.state.currentImage} alt={this.state.currentDescr}></Image>
+      <Image src={this.props.picture} alt={this.props.description}></Image>
     );
   }
 }

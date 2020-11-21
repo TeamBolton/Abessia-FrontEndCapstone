@@ -64,13 +64,21 @@ const ZoomImage = styled(Item)`
 class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.retrieveData = this.retrieveData.bind(this);
     this.parseData = this.parseData.bind(this);
+    this.updateMainImage = this.updateMainImage.bind(this);
+
     this.state = {
       data: null,
-      currentID: 1,  //default to 1 for dummy data
+      currentID: 3,  //default to 1 for dummy data
       currentColor: 0, //default to 0 for dummy data
+      currentColorObject: null,
+      currentImage: null,
+      currentDescr: null,
       currentProduct: null,
+      currentImageSet: null,
+      currentImgIndex: 1, //defaults to 1
     };
   }
 
@@ -93,7 +101,7 @@ class App extends React.Component {
       })
       .catch(err => {
         console.error('Error in retrieveData(): ' + err);
-        callback(err);
+        return;
       });
   }
 
@@ -113,52 +121,43 @@ class App extends React.Component {
     }
 
     var index = this.state.currentID - 1;
-    console.log(parsedData);
-    console.log(parsedData[index]);
+    var curImgSet = parsedData[index].colors[this.state.currentColor].pictures;
+    var curColObj = parsedData[index].colors[this.state.currentColor];
+    var curImg = curImgSet[0].image;
+    var curDescr = curImgSet[0].description;
 
     this.setState({
       data: parsedData,
       currentProduct: parsedData[index],
+      currentImage: curImg,
+      currentDescr: curDescr,
+      currentImageSet: curImgSet,
+      currentColorObject: curColObj
     });
+  }
 
-    /*if (this.state.currentID !== undefined){
-      this.setState(
-        {currentProduct: parsedData[this.state.currentID - 1]}
-      );
-    }*/
+  updateMainImage(index) {
+    var newImg = this.state.currentImageSet[index].image;
+    var newDescr = this.state.currentImageSet[index].description;
+    this.setState({
+      currentImage: newImg,
+      currentDescr: newDescr,
+      currentImgIndex: index + 1
+    });
   }
 
   render() {
-    if (this.state.currentProduct !== null) {
-      console.log('Current Product and Color Array:');
-      console.log(this.state.currentProduct);
-      console.log(this.state.currentProduct.colors[this.state.currentColor]);
-    }
-
     if (this.state.currentProduct === null) {
       return (
-        <div>
-          <Grid className="grid-container">
-            <MainImage className="grid-item">
-            </MainImage>
-            <ZoomImage className="grid-item">
-            </ZoomImage>
-            <LeftButton className="grid-item">
-            </LeftButton>
-            <PreviewImageBar className="grid-item">
-            </PreviewImageBar>
-            <RightButton className="grid-item">
-            </RightButton>
-            <Blank className="grid-item"></Blank>
-          </Grid>
-        </div>
+        <div>Product is Null</div>
       );
     } else {
+      console.log(this.state.currentImage);
       return (
         <div>
           <Grid className="grid-container">
             <MainImage className="grid-item">
-              <Main product={this.state.currentProduct}/>
+              <Main picture={this.state.currentImage} description={this.state.currentDescr}/>
             </MainImage>
             <ZoomImage className="grid-item">
             </ZoomImage>
@@ -166,14 +165,14 @@ class App extends React.Component {
               <Left/>
             </LeftButton>
             <PreviewImageBar className="grid-item">
-              <Previews images={this.state.currentProduct.colors[0].pictures}/>
+              <Previews images={this.state.currentImageSet} updateMain={this.updateMainImage}/>
             </PreviewImageBar>
             <RightButton className="grid-item">
               <Right/>
             </RightButton>
             <Blank className="grid-item"></Blank>
           </Grid>
-          <Info product={this.state.currentProduct}/>
+          <Info color={this.state.currentColorObject} index={this.state.currentImgIndex}/>
         </div>
       );
     }

@@ -8,7 +8,7 @@ class Info extends React.Component {
 
   render () {
     return (
-      <div>Information Bar Goes Here</div>
+      <div>Image {this.props.index} of {this.props.color.pictures.length}: {this.props.color.name}</div>
     );
   }
 }

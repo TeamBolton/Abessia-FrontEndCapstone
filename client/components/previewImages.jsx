@@ -4,15 +4,15 @@ import PreviewImage from './previewImage.jsx';
 
 const PreviewRow = styled.div`
 display: grid;
-grid-template-columns: 85px 85px 85px 85px 85px;
-grid-template-rows: 85px;
-grid-gap: 2px;
+grid-template-columns: 80px 80px 80px 80px 80px;
+grid-template-rows: 68px;
+grid-gap: 8px;
 `;
 
 class Previews extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
+    this.updateAppImage = this.updateAppImage.bind(this);
 
     this.state = {
       imageCount: this.props.images.length,
@@ -20,7 +20,7 @@ class Previews extends React.Component {
       currentDescr: this.props.images[0].description,
       imageArray: this.props.images,
       visibleImages: null,
-      leftIndex: 0 //this will be effected by clicking the R/L arrows
+      leftIndex: 0, //this will be effected by clicking the R/L arrows
     };
   }
 
@@ -30,7 +30,7 @@ class Previews extends React.Component {
       if (this.state.imageArray[i] === undefined) {
         break;
       } else {
-        visImageArray.push(this.state.imageArray[i]);
+        visImageArray.push({index: i, picture: this.state.imageArray[i]});
       }
     }
 
@@ -43,12 +43,26 @@ class Previews extends React.Component {
     this.generateVisibleImageArray();
   }
 
+  updateAppImage(index) {
+    console.log('Index sent to Previews.updateAppImage: ' + index);
+    this.props.updateMain(index);
+  }
+
   render () {
     if (this.state.visibleImages !== null) {
       const CurImgs = this.state.visibleImages;
       return (
         <PreviewRow className='grid-container'>
-          {CurImgs.map((imageObj, index) => <PreviewImage className='grid-item' key={index} imageObj={imageObj}/>)}
+          {CurImgs.map((imageObj) =>
+            (
+              <PreviewImage
+                className='grid-item'
+                key={imageObj.index}
+                index={imageObj.index}
+                imageObj={imageObj.picture}
+                signalUpdate={this.updateAppImage}/>
+            )
+          )}
         </PreviewRow>
       );
     } else {

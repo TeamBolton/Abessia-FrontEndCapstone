@@ -20,7 +20,6 @@ app.get('/api/products/photos', (req, res) => {
         res.end();
       } else {
         res.send(response);
-        res.end();
       }
     })
   }
