@@ -1,7 +1,7 @@
 const Seed = require('./seedDB.js');
 const Config = require('./config.js');
 
-const Connection = Seed.makeConnection('rewhy');
+const Connection = Seed.makeConnection('rewhyimages');
 
 const CreateMainDatabase = function (database, callback) {
   const Data = Seed.generateProductsTable(100);

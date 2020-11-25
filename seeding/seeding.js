@@ -1,6 +1,6 @@
-const Database = require('../server/database.js').
+const Database = require('../server/database.js');
 
-Database.CreateMainDatabase('rewhy', (err) => {
+Database.CreateMainDatabase('rewhyimages', (err) => {
   if (err) {
     console.error(err);
   } else {

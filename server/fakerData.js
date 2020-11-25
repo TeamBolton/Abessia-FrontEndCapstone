@@ -27,8 +27,8 @@ const selectColors = () => {
 
 const newPicArray = () => {
   var picArray = [];
-  //generate 1 to 8 image/description pairs
-  var numPics = Math.floor((Math.random() * 7) + 1);
+  //generate 1 to 12 image/description pairs
+  var numPics = Math.floor((Math.random() * 11) + 1);
   for (let j = 0; j < numPics; j++) {
     picArray.push(newPicture());
   }

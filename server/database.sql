@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS rewhy;
+DROP DATABASE IF EXISTS rewhyimages;
 
-CREATE DATABASE rewhy;
+CREATE DATABASE rewhyimages;
 
-USE rewhy;
+USE rewhyimages;
 
 CREATE TABLE products (
   id int NOT NULL AUTO_INCREMENT,

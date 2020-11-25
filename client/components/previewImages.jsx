@@ -56,6 +56,7 @@ class Previews extends React.Component {
           {CurImgs.map((imageObj) =>
             (
               <PreviewImage
+                data-test="preview-image"
                 className='grid-item'
                 key={imageObj.index}
                 index={imageObj.index}

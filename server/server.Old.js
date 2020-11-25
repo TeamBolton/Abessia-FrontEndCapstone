@@ -9,7 +9,7 @@ describe('Jest: ', () => {
   });
 });
 
-describe('Faker: ', () => {
+/*describe('Faker: ', () => {
   var testProduct = Data.newProduct();
 
   it('creates a fake product', () => {
@@ -48,4 +48,4 @@ describe('seedDB: ', () => {
       expect(result !== null).toBe(true);
     });
   });
-});
+});*/

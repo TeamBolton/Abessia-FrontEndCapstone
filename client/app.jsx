@@ -1,6 +1,5 @@
 //dependencies
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Axios from 'axios';
 import styled from 'styled-components';
@@ -15,7 +14,7 @@ import Previews from './components/previewImages.jsx';
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px 85px;
+  grid-template-columns: 85px 85px 85px 85px 85px 85px 85px;
   grid-template-rows: 85px 85px 85px 85px 85px 85px 85px 85px;
   grid-gap: 2px;
 `;
@@ -49,17 +48,17 @@ const PreviewImageBar = styled(Item)`
   grid-row: 8;
 `;
 
-const Blank = styled(Item)`
+/*const Blank = styled(Item)`
   grid-area: blank;
   grid-column: 8 / 13;
   grid-row: 8 / 9;
-`;
+`;*/
 
-const ZoomImage = styled(Item)`
+/*const ZoomImage = styled(Item)`
   grid-area: zoom-image;
   grid-column: 8 / 13;
   grid-row: 1 / 8;
-`;
+`;*/
 
 class App extends React.Component {
   constructor(props) {
@@ -68,24 +67,29 @@ class App extends React.Component {
     this.retrieveData = this.retrieveData.bind(this);
     this.parseData = this.parseData.bind(this);
     this.updateMainImage = this.updateMainImage.bind(this);
+    this.updateDataState = this.updateDataState.bind(this);
 
     this.state = {
       data: null,
-      currentID: 3,  //default to 1 for dummy data
-      currentColor: 0, //default to 0 for dummy data
+      currentID: this.props.ID,
+      currentColor: 0, //default to 0
       currentColorObject: null,
       currentImage: null,
       currentDescr: null,
       currentProduct: null,
       currentImageSet: null,
-      currentImgIndex: 1, //defaults to 1
+      currentImgIndex: 1, //default to 1
     };
   }
 
   componentDidMount() {
-    this.retrieveData((error, unparsedData) => {
-      this.parseData(unparsedData);
-    });
+    if (this.props.data) {
+      this.updateDataState(this.props.data);
+    } else {
+      this.retrieveData((error, unparsedData) => {
+        this.parseData(unparsedData);
+      });
+    }
   }
 
   retrieveData(callback) {
@@ -120,15 +124,19 @@ class App extends React.Component {
       parsedData.push(newObj);
     }
 
+    this.updateDataState(parsedData);
+  }
+
+  updateDataState(data) {
     var index = this.state.currentID - 1;
-    var curImgSet = parsedData[index].colors[this.state.currentColor].pictures;
-    var curColObj = parsedData[index].colors[this.state.currentColor];
+    var curImgSet = data[index].colors[this.state.currentColor].pictures;
+    var curColObj = data[index].colors[this.state.currentColor];
     var curImg = curImgSet[0].image;
     var curDescr = curImgSet[0].description;
 
     this.setState({
-      data: parsedData,
-      currentProduct: parsedData[index],
+      data: data,
+      currentProduct: data[index],
       currentImage: curImg,
       currentDescr: curDescr,
       currentImageSet: curImgSet,
@@ -152,31 +160,27 @@ class App extends React.Component {
         <div>Product is Null</div>
       );
     } else {
-      console.log(this.state.currentImage);
       return (
         <div>
-          <Grid className="grid-container">
-            <MainImage className="grid-item">
-              <Main picture={this.state.currentImage} description={this.state.currentDescr}/>
+          <Grid className="grid-container" data-test="master-grid">
+            <MainImage className="grid-item" data-test="main-image-grid">
+              <Main picture={this.state.currentImage} description={this.state.currentDescr} data-test="main-image"/>
             </MainImage>
-            <ZoomImage className="grid-item">
-            </ZoomImage>
-            <LeftButton className="grid-item">
-              <Left/>
+            <LeftButton className="grid-item" data-test="left-button-grid">
+              <Left data-test="left-button"/>
             </LeftButton>
-            <PreviewImageBar className="grid-item">
-              <Previews images={this.state.currentImageSet} updateMain={this.updateMainImage}/>
+            <PreviewImageBar className="grid-item" data-test="preview-bar-grid">
+              <Previews images={this.state.currentImageSet} updateMain={this.updateMainImage} data-test="previews"/>
             </PreviewImageBar>
-            <RightButton className="grid-item">
-              <Right/>
+            <RightButton className="grid-item" data-test="right-button-grid">
+              <Right data-test="right-button"/>
             </RightButton>
-            <Blank className="grid-item"></Blank>
           </Grid>
-          <Info color={this.state.currentColorObject} index={this.state.currentImgIndex}/>
+          <Info color={this.state.currentColorObject} index={this.state.currentImgIndex} data-test="info-bar"/>
         </div>
       );
     }
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+export default App;
