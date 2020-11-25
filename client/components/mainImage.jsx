@@ -29,7 +29,7 @@ class Main extends React.Component {
 
   render () {
     return (
-      <Image src={this.props.picture} alt={this.props.description}></Image>
+      <Image src={this.props.picture} alt={this.props.description} data-test="current-main-image"></Image>
     );
   }
 }

@@ -6,8 +6,10 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 //Components and Files
 import App from './app';
+import Main from './components/mainImage';
 import Info from './components/informationBar';
 import Previews from './components/previewImages';
+import PreviewImage from './components/previewImage';
 
 Enzyme.configure({
   adapter: new Adapter()
@@ -29,7 +31,6 @@ const findByTestAttr = (Wrapper, string) => {
 //Unit Tests
 test('App renders without crashing', () => {
   const Wrapper = setup();
-  //console.log(Wrapper.debug());
   expect(Wrapper).toBeTruthy();
 });
 
@@ -71,7 +72,6 @@ test('Info bar displays current picture, number of pictures, and the current col
   const sampleColor = TestDataSet[0].colors.[0];
   const InfoBar = shallow(<Info color={sampleColor} index={1}/>);
   const InfoText = InfoBar.text();
-
   expect(InfoText).toBe(`Image ${1} of ${sampleColor.pictures.length}: ${sampleColor.name}`);
 });
 
@@ -80,9 +80,44 @@ test('Preview Image Bar displays 5 or fewer images', () => {
   while (samplePictures.length < 6) {
     samplePictures = Data.newPicArray();
   }
-
   const PreviewBar = shallow(<Previews images={samplePictures}/>);
   const Images = findByTestAttr(PreviewBar, "preview-image");
-
   expect(Images.length).toBeLessThan(6);
+});
+
+test('Main Image displays an image served from an S3 external database', () => {
+  var samplePic = Data.newPicture();
+  const MainImage = shallow(<Main picture={samplePic.image} description={samplePic.description}/>);
+  const CurrentMain = findByTestAttr(MainImage, "current-main-image");
+  const DisplayedImage = CurrentMain.find(`[src='${samplePic.image}']`);
+  expect(DisplayedImage.length).toBe(1);
+});
+
+test('Preview Images update Main Image when clicked', () => {
+  var samplePic = Data.newPicture();
+  var count = 0;
+  var updateCount = function (index) {
+    if (index === 2) {
+      count++;
+    }
+  }
+  const Image = shallow(<PreviewImage index={2} imageObj={samplePic} signalUpdate={updateCount}/>);
+  Image.simulate('click');
+  expect(count).toBe(1);
+});
+
+xtest('Preview Image Bar updates Main Image when signaled by a Preview Image', () => {
+
+});
+
+xtest('App updates Main Image when signaled by Preview Image Bar', () => {
+
+});
+
+xtest('Clicking the Left Arrow decrements Preview Image Bar Left-Index', () => {
+
+});
+
+xtest('Clicking the Right Arrow increments Preview ImageBar Left-Index', () => {
+
 });

@@ -8,6 +8,13 @@ const Image = styled.img`
   border: 1px solid lightgrey;
 `;
 
+const SelectedImage = styled.img`
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+  border: 1px solid lightblue;
+`;
+
 class PreviewImage extends React.Component{
   constructor(props) {
     super(props);
@@ -21,22 +28,30 @@ class PreviewImage extends React.Component{
   }
 
   handleClick() {
-    /*this.setState({
+    this.setState({
       isSelected: true
-    });*/
-    console.log('Click at ' + this.state.index + '.');
-
+    });
     this.props.signalUpdate(this.state.index);
   }
 
   render() {
-    return(
-      <Image
+    if(!this.state.isSelected) {
+      return(
+        <Image
+          src={this.props.imageObj.image}
+          alt={this.props.imageObj.description}
+          onClick={this.handleClick}>
+        </Image>
+      );
+    } else if (this.state.isSelected) {
+      return(
+        <SelectedImage
         src={this.props.imageObj.image}
         alt={this.props.imageObj.description}
         onClick={this.handleClick}>
-      </Image>
-    );
+      </SelectedImage>
+      );
+    }
   }
 }
 
