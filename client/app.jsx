@@ -10,7 +10,6 @@ import Info from './components/informationBar.jsx';
 import Left from './components/leftButton.jsx';
 import Right from './components/rightButton.jsx';
 import Previews from './components/previewImages.jsx';
-//import Zoom from './components/zoomBox.jsx';
 
 const Grid = styled.div`
   display: grid;
@@ -47,18 +46,6 @@ const PreviewImageBar = styled(Item)`
   grid-column: 2 / 7;
   grid-row: 8;
 `;
-
-/*const Blank = styled(Item)`
-  grid-area: blank;
-  grid-column: 8 / 13;
-  grid-row: 8 / 9;
-`;*/
-
-/*const ZoomImage = styled(Item)`
-  grid-area: zoom-image;
-  grid-column: 8 / 13;
-  grid-row: 1 / 8;
-`;*/
 
 class App extends React.Component {
   constructor(props) {

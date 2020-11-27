@@ -1,10 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import Magnify from 'react-image-magnify';
 
-const Image = styled.img`
-  object-fit: cover;
-  width: 100%;
-  max-height: 100%;
+const Zoom = styled(Magnify)`
+  .main-image = {
+    object-fit: cover;
+    width: 100%;
+    max-height: 100%;
+  }
+
+  .zoom-image = {
+    object-fit: cover;
+    width: 50%;
+    max-height: 50%;
+  }
 `;
 
 class Main extends React.Component {
@@ -14,7 +23,6 @@ class Main extends React.Component {
     this.state = {
       currentImage: 'Image',
       currentDescr: 'Description',
-      isZoom: false
     };
   }
 
@@ -28,8 +36,27 @@ class Main extends React.Component {
 
 
   render () {
+    var smallImg = {
+      src: this.props.picture,
+      isFluidWidth: true,
+      alt: this.props.description
+    };
+
+    var largeImg = {
+      src: this.props.picture,
+      width: 2200,
+      height: 2200
+    };
+
+    var magnifyProps = {
+      smallImage: smallImg,
+      largeImage: largeImg,
+      imageClassName: 'main-image',
+      enlargedImageClassName: 'zoom-image',
+    }
+
     return (
-      <Image src={this.props.picture} alt={this.props.description} data-test="current-main-image"></Image>
+      <Zoom {...magnifyProps} data-test="current-main-image"/>
     );
   }
 }
