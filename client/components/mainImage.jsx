@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import Magnify from 'react-image-magnify';
 
 const Zoom = styled(Magnify)`
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+
   .main-image = {
     object-fit: cover;
     width: 100%;
@@ -48,10 +52,17 @@ class Main extends React.Component {
       height: 2200
     };
 
+    var mainImgStyle = {
+      'objectFit': 'cover',
+      'width': '100%',
+      'maxHeight': '607px'
+    };
+
     var magnifyProps = {
       smallImage: smallImg,
       largeImage: largeImg,
-      imageClassName: 'main-image',
+      className: 'main-image',
+      imageStyle: mainImgStyle,
       enlargedImageClassName: 'zoom-image',
     }
 
