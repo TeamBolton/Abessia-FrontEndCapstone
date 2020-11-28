@@ -7,8 +7,6 @@ import styled from 'styled-components';
 //components
 import Main from './components/mainImage.jsx';
 import Info from './components/informationBar.jsx';
-import Left from './components/leftButton.jsx';
-import Right from './components/rightButton.jsx';
 import Previews from './components/previewImages.jsx';
 
 const Grid = styled.div`
@@ -29,21 +27,9 @@ const MainImage = styled(Item)`
   grid-row: 1 / 8;
 `;
 
-const LeftButton = styled(Item)`
-  grid-area: left-button;
-  grid-column: 1;
-  grid-row: 8;
-`;
-
-const RightButton = styled(Item)`
-  grid-area: right-button;
-  grid-column: 7;
-  grid-row: 8;
-`;
-
 const PreviewImageBar = styled(Item)`
   grid-area: preview-image-bar;
-  grid-column: 2 / 7;
+  grid-column: 1 / 8;
   grid-row: 8;
 `;
 
@@ -65,6 +51,7 @@ class App extends React.Component {
       currentDescr: null,
       currentProduct: null,
       currentImageSet: null,
+      currentImageCount: null,
       currentImgIndex: 1, //default to 1
     };
   }
@@ -127,6 +114,7 @@ class App extends React.Component {
       currentImage: curImg,
       currentDescr: curDescr,
       currentImageSet: curImgSet,
+      currentImageCount: curImgSet.length,
       currentColorObject: curColObj
     });
   }
@@ -144,7 +132,7 @@ class App extends React.Component {
   render() {
     if (this.state.currentProduct === null) {
       return (
-        <div>Product is Null</div>
+        <div>Waiting. . .</div>
       );
     } else {
       return (
@@ -153,15 +141,9 @@ class App extends React.Component {
             <MainImage className="grid-item" data-test="main-image-grid">
               <Main picture={this.state.currentImage} description={this.state.currentDescr} data-test="main-image"/>
             </MainImage>
-            <LeftButton className="grid-item" data-test="left-button-grid">
-              <Left data-test="left-button"/>
-            </LeftButton>
             <PreviewImageBar className="grid-item" data-test="preview-bar-grid">
               <Previews images={this.state.currentImageSet} updateMain={this.updateMainImage} data-test="previews"/>
             </PreviewImageBar>
-            <RightButton className="grid-item" data-test="right-button-grid">
-              <Right data-test="right-button"/>
-            </RightButton>
           </Grid>
           <Info color={this.state.currentColorObject} index={this.state.currentImgIndex} data-test="info-bar"/>
         </div>

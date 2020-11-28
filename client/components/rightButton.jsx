@@ -10,12 +10,22 @@ const Image = styled.img`
 class Right extends React.Component {
   constructor(props) {
     super (props);
+
+    this.handleClick = this.props.clickHandler;
   }
 
   render() {
-    return (
-      <Image src="https://cdn2.iconfinder.com/data/icons/arrows-vol-1-1/32/right-512.png" alt="Right Arrow"></Image>
-    );
+    if(this.props.count > 5) {
+      return (
+        <Image
+          src="https://cdn2.iconfinder.com/data/icons/arrows-vol-1-1/32/right-512.png"
+          alt="Right Arrow"
+          onClick={this.handleClick}>
+        </Image>
+      );
+    } else {
+      return (<div></div>);
+    }
   }
 }
 
