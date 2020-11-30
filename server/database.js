@@ -20,8 +20,8 @@ const CreateMainDatabase = function (database, callback) {
   })
 }
 
-const RetrieveData = function (callback) {
-  Connection.query('SELECT * FROM products;', (err, res, fields) => {
+const RetrieveData = function (productID, callback) {
+  Connection.query(`SELECT * FROM products WHERE id = ${productID};`, (err, res, fields) => {
     if(err) {
       console.error('DB Error: RetrieveData Failed');
       callback(err);

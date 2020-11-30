@@ -43,7 +43,6 @@ class App extends React.Component {
     this.updateDataState = this.updateDataState.bind(this);
 
     this.state = {
-      data: null,
       currentID: this.props.ID,
       currentColor: 0, //default to 0
       currentColorObject: null,
@@ -57,23 +56,39 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.data) {
-      this.updateDataState(this.props.data);
+    console.log(window.location.pathname);
+    const path = window.location.pathname;
+    let id = path.slice(1);
+    if (id.indexOf('/')) {
+      id.slice(0, (id.indexOf('/')));
+    }
+    console.log('id: ', id);
+
+    if (this.props.productObj) {
+      this.updateDataState(this.props.productObj);
     } else {
-      this.retrieveData((error, unparsedData) => {
-        this.parseData(unparsedData);
+      this.retrieveData(id, (error, unparsedData) => {
+        if(error !== null) {
+          console.error(error);
+        } else {
+          console.log('this.parseData being called with:');
+          console.log(unparsedData);
+          this.parseData(unparsedData);
+        }
       });
     }
   }
 
-  retrieveData(callback) {
-    Axios.get('/api/products/photos')
+  retrieveData(id=1, callback) {
+    Axios.get(`/api/products/photos/${id}`)
       .then(res => {
         if (res === null || res === undefined) {
-          let empty = 'retrieveData returned an empty response from the database'
+          let empty = 'retrieveData returned an empty response from the database';
           console.error(empty);
           callback(empty);
         } else {
+          console.log('app.jsx retrieveData method calling callback with res.data: ');
+          console.log(res.data);
           callback(null, res.data);
         }
       })
@@ -84,37 +99,35 @@ class App extends React.Component {
   }
 
   parseData(unparsedData) {
-    var parsedData = [];
-    for (let i = 0; i < unparsedData.length; i++) {
-      let currentObj = unparsedData[i];
-      let parsedColors = JSON.parse(currentObj.colors);
-      let newObj = {
-        id: currentObj.id,
-        name: currentObj.name,
-        company: currentObj.company,
-        price: currentObj.price,
-        colors: parsedColors
-      }
-      parsedData.push(newObj);
+    let currentObj = unparsedData.pop();
+    let parsedColors = JSON.parse(currentObj.colors);
+    let newObj = {
+      id: currentObj.id,
+      name: currentObj.name,
+      company: currentObj.company,
+      price: currentObj.price,
+      colors: parsedColors
     }
 
-    this.updateDataState(parsedData);
+    this.updateDataState(newObj);
   }
 
-  updateDataState(data) {
-    var index = this.state.currentID - 1;
-    var curImgSet = data[index].colors[this.state.currentColor].pictures;
-    var curColObj = data[index].colors[this.state.currentColor];
+  updateDataState(productObj) {
+    var index = productObj.id - 1;
+    var colorNum = Math.floor(Math.random() * productObj.colors.length);
+    var curImgSet = productObj.colors[colorNum].pictures;
+    var curColObj = productObj.colors[colorNum];
+
     var curImg = curImgSet[0].image;
     var curDescr = curImgSet[0].description;
 
     this.setState({
-      data: data,
-      currentProduct: data[index],
+      currentProduct: productObj,
       currentImage: curImg,
       currentDescr: curDescr,
       currentImageSet: curImgSet,
       currentImageCount: curImgSet.length,
+      currentColor: colorNum,
       currentColorObject: curColObj
     });
   }
