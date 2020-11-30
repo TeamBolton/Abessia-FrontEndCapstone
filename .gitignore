@@ -1,5 +1,4 @@
 config.js
-bundle.js
 clover.xml
 lcov.info
 coverage-final.json
